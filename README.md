@@ -26,6 +26,7 @@ In our case the black box is the VGG19 model, but this can use any differentiabl
 ----------
 # How it works
 ![Equation](https://github.com/jacobgil/pytorch-explain-black-box/blob/master/examples/equation.png?raw=true)
+*Taken from the paper https://arxiv.org/abs/1704.03296*
 
 The goal is to solve for a mask that explains why did the network output a score for a certain category.
 
