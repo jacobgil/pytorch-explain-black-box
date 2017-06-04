@@ -11,9 +11,7 @@ Usage: `python explain.py <path_to_image>`
 
 This is a PyTorch impelentation of 
 
-***"Interpretable Explanations of Black Boxes by Meaningful Perturbation. Ruth Fong, Andrea Vedaldi"*** 
-
-with some deviations.
+***"Interpretable Explanations of Black Boxes by Meaningful Perturbation. Ruth Fong, Andrea Vedaldi"***  with some deviations.
 
 The paper: https://arxiv.org/abs/1704.03296
 
@@ -35,11 +33,11 @@ Wherever the mask contains low values, the input image will become more blurry.
 We want to optimize for the next properties:
 
  1. When blending the mask with the image and the blurred image and using it as an input to the network, the score of the target category should drop significantly. 
- All evidence of the category should be removed!
+The evidence of the category should be removed!
  2. The mask should be sparse. Ideally the mask should be the minimal possible mask to drop the category score.  This translates to a L1(1 - mask) term in the cost function.
  3. The mask should be smooth.
  This translates to a total variation regularization in the cost function.
- 4. The mask shouldn't over-fit the network. Since the network activations might contain a lot of noise, it can be easy for the mask to just learn random values that cause the score to drop.
+ 4. The mask shouldn't over-fit the network. Since the network activations might contain a lot of noise, it can be easy for the mask to just learn random values that cause the score to drop without being visually coherent.
  In addition to the other terms, this translates to solving for a lower resolution 28x28 mask.
 
 
@@ -55,6 +53,7 @@ Then during optimization, the input image pixel would use the quantized mask val
 
 This was done using the PyTorch variable gather/select_index functions.
 But it turns out that the gather and select_index functions in PyTorch are not differentiable by the indexes.
+
 
 Instead, we just compute a perturbed image once, and then blend the image and the perturbed image using:
 
