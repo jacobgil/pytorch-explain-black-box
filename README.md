@@ -15,11 +15,18 @@ This is a PyTorch impelentation of
 
 This uses VGG19 from torchvision. It will be downloaded when used for the first time.
 
-This learns a mask of pixels that explain the result of a black box, without peeking inside it's intermediate layers (in case of a deep learning model) or data.
+This learns a mask of pixels that explain the result of a black box.
+The mask is learned by posing an optimization problem and solving directly for the mask values.
+
+This is different than other visualization techniques like Grad-CAM that use heuristics like high positive gradient values as an indication of relevance to the network score.
+
+
 In our case the black box is the VGG19 model, but this can use any differentiable model.
 
 ----------
 # How it works
+![Equation](https://github.com/jacobgil/pytorch-explain-black-box/blob/master/examples/equation.png?raw=true)
+
 The goal is to solve for a mask that explains why did the network output a score for a certain category.
 
 We create a low resolution (28x28) mask, and use it to perturb the input image to a deep learning network.
@@ -30,7 +37,7 @@ Wherever the mask contains low values, the input image will become more blurry.
 
 We want to optimize for the next properties:
 
- 1. When blending the mask with the image and the blurred image and using it as an input to the network, the score of the target category should drop significantly. 
+ 1. When using the mask to blend the input image and it's blurred versions, the score of the target category should drop significantly. 
 The evidence of the category should be removed!
  2. The mask should be sparse. Ideally the mask should be the minimal possible mask to drop the category score.  This translates to a L1(1 - mask) term in the cost function.
  3. The mask should be smooth.
