@@ -42,7 +42,7 @@ The evidence of the category should be removed!
 ----------
 
 # Deviations from the paper
-The paper uses a gaussian kernel that is modulated by the value of the mask.
+The paper uses a gaussian kernel with a sigma that is modulated by the value of the mask.
 This is computational costly  to compute since the mask values are updated during the iterations, 
 meaning we need a different kernel for every mask pixel for every iteration.
 
