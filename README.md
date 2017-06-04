@@ -1,5 +1,5 @@
 ## PyTorch implementation of Interpretable Explanations of Black Boxes by Meaningful Perturbation ##
-
+The paper: https://arxiv.org/abs/1704.03296
 #### What makes the deep learning network think the image label is 'pug, pug-dog' and 'tabby, tabby cat':
 ![Dog](https://github.com/jacobgil/pytorch-explain-black-box/blob/master/examples/dog.png?raw=true) ![Cat](https://github.com/jacobgil/pytorch-explain-black-box/blob/master/examples/cat.png?raw=true)
 
@@ -12,8 +12,6 @@ Usage: `python explain.py <path_to_image>`
 This is a PyTorch impelentation of 
 
 ***"Interpretable Explanations of Black Boxes by Meaningful Perturbation. Ruth Fong, Andrea Vedaldi"***  with some deviations.
-
-The paper: https://arxiv.org/abs/1704.03296
 
 This uses VGG19 from torchvision. It will be downloaded when used for the first time.
 
