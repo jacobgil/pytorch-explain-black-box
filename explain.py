@@ -87,9 +87,9 @@ if __name__ == '__main__':
 	#TBD: Use argparse
 	tv_beta = 3
 	learning_rate = 0.1
-	max_iterations = 300
-	l1_coeff = 0.0001
-	tv_coeff = 0.01
+	max_iterations = 500
+	l1_coeff = 0.01
+	tv_coeff = 0.2
 
 	model = load_model()
 	original_img = cv2.imread(sys.argv[1], 1)
@@ -102,7 +102,7 @@ if __name__ == '__main__':
 	
 	# Convert to torch variables
 	img = preprocess_image(img)
-	blurred_img = preprocess_image(blurred_img_numpy)
+	blurred_img = preprocess_image(blurred_img2)
 	mask = numpy_to_torch(mask_init)
 
 	if use_cuda:
@@ -128,6 +128,10 @@ if __name__ == '__main__':
 		perturbated_input = img.mul(upsampled_mask) + \
 							blurred_img.mul(1-upsampled_mask)
 		
+		noise = np.zeros((224, 224, 3), dtype = np.float32)
+		noise = noise + cv2.randn(noise, 0, 0.2)
+		noise = numpy_to_torch(noise)
+		perturbated_input = perturbated_input + noise
 		
 		outputs = torch.nn.Softmax()(model(perturbated_input))
 		loss = l1_coeff*torch.mean(torch.abs(1 - mask)) + \
