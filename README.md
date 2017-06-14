@@ -8,7 +8,7 @@ The paper: https://arxiv.org/abs/1704.03296
 
 
 ### What makes the deep learning network think the image label is 'flute, transverse flute':
-![Flute](https://github.com/jacobgil/pytorch-explain-black-box/blob/master/examples/flute_cam.png?raw=true)
+![Flute](https://github.com/jacobgil/pytorch-explain-black-box/blob/master/examples/flute_cam.jpg?raw=true)
 
 
 ----------
