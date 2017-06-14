@@ -6,6 +6,11 @@ The paper: https://arxiv.org/abs/1704.03296
 #### A perturbation of the dog that caused the dog category score to vanish:
 ![Perturbed](https://github.com/jacobgil/pytorch-explain-black-box/blob/master/examples/perturbated_dog.png?raw=true)
 
+
+### What makes the deep learning network think the image label is 'flute, transverse flute':
+![Flute](https://github.com/jacobgil/pytorch-explain-black-box/blob/master/examples/flute_cam.png?raw=true)
+
+
 ----------
 Usage: `python explain.py <path_to_image>`
 
