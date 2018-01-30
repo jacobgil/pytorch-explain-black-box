@@ -1,5 +1,3 @@
-import sys
-
 import cv2
 import numpy as np
 import torch
@@ -20,6 +18,11 @@ def tv_norm(input_image, tv_beta):
 
 
 def preprocess_image(img):
+    """
+    画像の前処理
+    :param img:
+    :return:
+    """
     means = [0.485, 0.456, 0.406]
     stds = [0.229, 0.224, 0.225]
 
@@ -89,17 +92,26 @@ def load_model():
     return model
 
 
-if __name__ == '__main__':
-    # Hyper parameters.
-    # TBD: Use argparse
-    tv_beta = 3
-    learning_rate = 0.1
-    max_iterations = 500
-    l1_coeff = 0.01
-    tv_coeff = 0.2
+def run(img_path,
+        tv_beta=3,
+        learning_rate=0.1,
+        max_iterations=500,
+        l1_coefficient=0.01,
+        tv_coefficient=0.2):
+    """
+    run main training script
+
+    :param str img_path:
+    :param int tv_beta:
+    :param float learning_rate:
+    :param int max_iterations:
+    :param float l1_coefficient:
+    :param float tv_coefficient:
+    :return:
+    """
 
     model = load_model()
-    original_img = cv2.imread(sys.argv[1], 1)
+    original_img = cv2.imread(img_path, 1)
     original_img = cv2.resize(original_img, (224, 224))
     img = np.float32(original_img) / 255
     blurred_img1 = cv2.GaussianBlur(img, (11, 11), 5)
@@ -120,10 +132,8 @@ if __name__ == '__main__':
 
     target = torch.nn.Softmax()(model(img))
     category = np.argmax(target.cpu().data.numpy())
-    print
-    "Category with highest probability", category
-    print
-    "Optimizing.. "
+    print("Category with highest probability", category)
+    print("Optimizing.. ")
 
     for i in range(max_iterations):
         upsampled_mask = upsample(mask)
@@ -133,8 +143,7 @@ if __name__ == '__main__':
             upsampled_mask.expand(1, 3, upsampled_mask.size(2), upsampled_mask.size(3))
 
         # Use the mask to perturbated the input image.
-        perturbated_input = img.mul(upsampled_mask) + \
-                            blurred_img.mul(1 - upsampled_mask)
+        perturbated_input = img.mul(upsampled_mask) + blurred_img.mul(1 - upsampled_mask)
 
         noise = np.zeros((224, 224, 3), dtype=np.float32)
         noise = noise + cv2.randn(noise, 0, 0.2)
@@ -142,8 +151,8 @@ if __name__ == '__main__':
         perturbated_input = perturbated_input + noise
 
         outputs = torch.nn.Softmax()(model(perturbated_input))
-        loss = l1_coeff * torch.mean(torch.abs(1 - mask)) + \
-               tv_coeff * tv_norm(mask, tv_beta) + outputs[0, category]
+        loss = l1_coefficient * torch.mean(torch.abs(1 - mask)) + tv_coefficient * tv_norm(mask, tv_beta) + outputs[
+            0, category]
 
         optimizer.zero_grad()
         loss.backward()
