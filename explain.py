@@ -129,7 +129,7 @@ if __name__ == '__main__':
 							blurred_img.mul(1-upsampled_mask)
 		
 		noise = np.zeros((224, 224, 3), dtype = np.float32)
-		noise = noise + cv2.randn(noise, 0, 0.2)
+		cv2.randn(noise, 0, 0.2)
 		noise = numpy_to_torch(noise)
 		perturbated_input = perturbated_input + noise
 		
